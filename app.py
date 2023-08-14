@@ -59,7 +59,8 @@ def generate_column_def(col):
         'filter': True,
     }
     
-    # If the column contains hyperlinks, add a cell renderer
+    # If the column contains hyperlinks, specify the cell renderer as Markdown
+    # See https://youtu.be/MzmefjD9Oow?t=331
     if col in ["Menu", "Source"]:
         col_def["cellRenderer"] = "markdown"
     
