@@ -66,8 +66,40 @@ def generate_column_def(col):
     
     return col_def
 
+# Set the page title
+app.title = "FedUp.LA"
+app.description = "A list of restaurants in Los Angeles that add a surcharge to their customers' bills."
+
+title_card = dbc.Card(
+  [
+    html.H3("FedUp.LA", className="card-title"),
+    html.I("Add them to the fuckin' list.", style={"margin-bottom": "10px"}),
+    html.P(
+      "This is a mobile-friendly searchable, sortable, and filterable table of restaurants in Los Angeles that add a surcharge to their customers' bills.",
+      style = {"margin-bottom": "0px"}
+    ),
+    html.I( # use a GitHub icon for my repo
+      className="bi bi-github",
+      style = {
+        "margin-right": "5px",
+        "margin-left": "0px"
+      },
+    ),
+    html.A("GitHub", href='https://github.com/perfectly-preserved-pie/xenosaga', target='_blank'),
+    html.I( # Add an icon for my blog
+      className="fa-solid fa-blog",
+      style = {
+        "margin-right": "5px",
+        "margin-left": "15px"
+      },
+    ),
+    html.A("About This Project", href='https://automateordie.io/xenosaga/', target='_blank'),
+  ],
+  body = True
+)
 
 app.layout = html.Div([
+    title_card,
     dag.AgGrid(
         id='my-grid',
         columnDefs=[generate_column_def(col) for col in df.columns],
