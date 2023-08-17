@@ -45,6 +45,15 @@ for row in ws.iter_rows():
 # Convert the Excel file to DataFrame
 df = pd.read_excel(filename, header=2)
 
+# Rename the "Restaurant Name" column to "Name"
+df.rename(columns={"Restaurant Name": "Name"}, inplace=True)
+
+# Convert the "Updated" column to American date format without the time
+df["Updated"] = df["Updated"].dt.strftime("%m/%d/%Y")
+
+# Move the "Updated" column to the end
+df = df[[col for col in df.columns if col != "Updated"] + ["Updated"]]
+
 # Update the Menu and Source columns with hyperlinks using Markdown
 for col in ["Menu", "Source"]:
     df[col] = df[col].apply(lambda x: f'[{x}]({links.get(x, "#")})' if x in links else x)
@@ -60,9 +69,12 @@ def generate_column_def(col):
     }
     
     # If the column contains hyperlinks, specify the cell renderer as Markdown
-    # See https://youtu.be/MzmefjD9Oow?t=331
     if col in ["Menu", "Source"]:
         col_def["cellRenderer"] = "markdown"
+    
+    # Pin the 'Name' column to the left side
+    if col == "Name":
+        col_def["pinned"] = "left"
     
     return col_def
 
@@ -113,10 +125,9 @@ app.layout = html.Div([
     )
 ])
 
-
 # Dash webserver
 if __name__ == '__main__':
     app.run_server(debug=True)
 
-# Gunicon webserver
+# Gunicorn webserver
 server = app.server
